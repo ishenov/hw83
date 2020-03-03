@@ -6,7 +6,7 @@ const nanoid = require('nanoid');
 
 const config = require('../config');
 
-const Artists = require('../models/Artist');
+const Artist = require('../models/Artist');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -22,7 +22,7 @@ const upload = multer({storage});
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const artists = await Artists.find();
+  const artists = await Artist.find();
   res.send(artists);
 });
 
@@ -33,7 +33,7 @@ router.post('/', upload.single('image'), async (req, res) => {
     artistData.image = req.file.filename;
   }
 
-  const artist = new Artists(artistData);
+  const artist = new Artist(artistData);
 
   try {
     await artist.save();

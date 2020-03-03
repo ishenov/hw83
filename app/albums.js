@@ -6,7 +6,7 @@ const nanoid = require('nanoid');
 
 const config = require('../config');
 
-const Albums = require('../models/Album');
+const Album = require('../models/Album');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -22,13 +22,18 @@ const upload = multer({storage});
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const albums = await Albums.find();
+  if (req.query.artist){
+    const albumsQuery = await Album.find({artist : req.query.artist});
+    res.send(albumsQuery);
+  }
+
+  const albums = await Album.find();
   res.send(albums);
 });
 
 router.get('/:id', async (req, res) => {
   try {
-    const album = await Albums.findById(req.params.id);
+    const album = await Album.findById(req.params.id).populate('Artist');
 
     if (!album) {
       return res.status(404).send({message: 'Not found'});
@@ -47,7 +52,7 @@ router.post('/', upload.single('image'), async (req, res) => {
     albumData.image = req.file.filename;
   }
 
-  const album = new Albums(albumData);
+  const album = new Album(albumData);
 
   try {
     await album.save();

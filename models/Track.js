@@ -11,7 +11,7 @@ const TrackSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Album'
 	},
-	duration: String
+	duration: String,
 });
 
 const Track = mongoose.model('Track', TrackSchema);
