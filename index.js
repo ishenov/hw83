@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.static('public'));
 
 const run = async () => {
-	await mongoose.connect('mongodb://localhost/shop', {
+	await mongoose.connect('mongodb://localhost/', {
 		useNewUrlParser: true,
 		useUnifiedTopology: true
 	});
